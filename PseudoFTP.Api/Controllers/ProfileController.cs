@@ -42,7 +42,7 @@ public class ProfileController : BaseController<ProfileController>
     [HttpPost]
     public async Task<ApiResponse> AddProfile(
         [FromHeader(Name = "X-Credential")] string credential,
-        [FromBody] AddProfileDto profileDto)
+        [FromBody] ProfileDto profileDto)
     {
         string username = CredentialHelper.GetUsername(credential);
         string password = CredentialHelper.GetPassword(credential);
@@ -78,14 +78,17 @@ public class ProfileController : BaseController<ProfileController>
 
         try
         {
-            await _profileService.DeleteProfileAsync(user, name);
+            ProfileDto? dto = await _profileService.DeleteProfileAsync(user, name);
+            if (dto == null)
+            {
+                return new OkResponse(new BadDto(1001, "Failed to delete profile or profile not found"));
+            }
+            return new OkResponse(new OkDto(data: dto));
         }
         catch (Exception e)
         {
             _logger.LogError(e, "Failed to delete profile");
             return new InternalServerErrorResponse(new InternalServerErrorDto(e.Message));
         }
-
-        return new OkResponse(new OkDto());
     }
 }

@@ -31,6 +31,18 @@ abstract class BaseService
         return response.Content;
     }
 
+    protected static ApiResponseDto GetResponseDto(RestResponse response)
+    {
+        string content = GetNonNullResponseContent(response);
+        var dto = JsonConvert.DeserializeObject<ApiResponseDto>(content);
+        if (dto == null)
+        {
+            throw new Exception("Failed to deserialize the response");
+        }
+
+        return dto;
+    }
+
     protected static ApiResponseDto<TResult> GetResponseDto<TResult>(RestResponse response)
     {
         string content = GetNonNullResponseContent(response);

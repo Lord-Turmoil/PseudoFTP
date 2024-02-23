@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "PseudoFTP.Client": {
+      "commandName": "Project"
+    },
+    "Client-Test": {
+      "commandName": "Project",
+      "commandLineArgs": "PseudoFTP.Client.exe profile --remove 1",
+      "workingDirectory": "$(ProjectDir)"
+    }
+  }
+}

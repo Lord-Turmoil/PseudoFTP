@@ -25,7 +25,18 @@ class ProfileService : BaseService
             request.AddHeader("X-Credential", CredentialHelper.GetCredential(_config.Username, _config.Password));
             RestResponse response = await _client.ExecuteAsync(request);
             var result = GetResult<IEnumerable<ProfileDto>>(response);
-            Console.WriteLine($"Profiles: {FormatResult(result)}");
+            if (result.Any())
+            {
+                Console.WriteLine("Profiles:");
+                foreach (ProfileDto entry in result)
+                {
+                    Console.WriteLine($"  {entry.Name} -- {entry.Destination}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("No profiles found.");
+            }
         }
         catch (Exception e)
         {
@@ -53,7 +64,6 @@ class ProfileService : BaseService
             request.AddHeader("X-Credential", CredentialHelper.GetCredential(_config.Username, _config.Password));
             request.AddHeader("Content-Type", "application/json");
             string body = $"{{\"name\":{JsonConvert.ToString(name)},\"destination\":{JsonConvert.ToString(path)}}}";
-            Console.WriteLine($"Body: {body}");
             request.AddStringBody(body, DataFormat.Json);
             RestResponse response = await _client.ExecuteAsync(request);
             ApiResponseDto<ProfileDto> dto = GetResponseDto<ProfileDto>(response);
@@ -75,8 +85,34 @@ class ProfileService : BaseService
         return 0;
     }
 
-    public int RemoveProfile()
+    public async Task<int> DeleteProfile()
     {
+        try
+        {
+            var request = new RestRequest("/api/Profile/DeleteProfile", Method.Delete);
+            request.AddHeader("X-Credential", CredentialHelper.GetCredential(_config.Username, _config.Password));
+            request.AddParameter("name", Uri.EscapeDataString(_options.Remove!));
+            RestResponse response = await _client.ExecuteAsync(request);
+            ApiResponseDto<ProfileDto> result = GetResponseDto<ProfileDto>(response);
+            if (result.Data == null)
+            {
+                Console.Error.WriteLine(result.Meta.Message);
+            }
+            else
+            {
+                result.Data.Name = result.Data.Name;
+                result.Data.Destination = result.Data.Destination;
+                Console.WriteLine($"Profile deleted: {FormatResult(result.Data)}");
+            }
+        }
+        catch (Exception e)
+        {
+            Console.Error.WriteLine($"Error: {e.Message}");
+            return 1;
+        }
+
+        return 0;
+
         return 0;
     }
 }

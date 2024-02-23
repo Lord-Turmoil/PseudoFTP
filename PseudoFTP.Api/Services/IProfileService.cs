@@ -26,7 +26,7 @@ public interface IProfileService
     /// <param name="user"></param>
     /// <param name="profileDto"></param>
     /// <returns></returns>
-    public Task<ProfileDto?> AddProfileAsync(User user, AddProfileDto profileDto);
+    public Task<ProfileDto?> AddProfileAsync(User user, ProfileDto profileDto);
 
     /// <summary>
     /// Delete a profile of a specific user.
@@ -34,5 +34,5 @@ public interface IProfileService
     /// <param name="user"></param>
     /// <param name="name"></param>
     /// <returns></returns>
-    public Task DeleteProfileAsync(User user, string name);
+    public Task<ProfileDto?> DeleteProfileAsync(User user, string name);
 }

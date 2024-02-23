@@ -43,14 +43,14 @@ public class ProfileService : BaseService<ProfileService>, IProfileService
         return profile == null ? null : _mapper.Map<Profile, ProfileDto>(profile);
     }
 
-    public async Task<ProfileDto?> AddProfileAsync(User user, AddProfileDto profileDto)
+    public async Task<ProfileDto?> AddProfileAsync(User user, ProfileDto profileDto)
     {
         if (await _repo.ExistsAsync(p => p.UserId == user.Id && p.Name.Equals(profileDto.Name)))
         {
             return null;
         }
 
-        Profile profile = _mapper.Map<AddProfileDto, Profile>(profileDto);
+        Profile profile = _mapper.Map<ProfileDto, Profile>(profileDto);
         profile.UserId = user.Id;
         EntityEntry<Profile> entity = await _repo.InsertAsync(profile);
         await _unitOfWork.SaveChangesAsync();
@@ -58,7 +58,7 @@ public class ProfileService : BaseService<ProfileService>, IProfileService
         return _mapper.Map<Profile, ProfileDto>(entity.Entity);
     }
 
-    public async Task DeleteProfileAsync(User user, string name)
+    public async Task<ProfileDto?> DeleteProfileAsync(User user, string name)
     {
         Profile? profile = await _repo.GetFirstOrDefaultAsync(
             predicate: p => p.Name.Equals(name) && p.UserId == user.Id);
@@ -66,6 +66,9 @@ public class ProfileService : BaseService<ProfileService>, IProfileService
         {
             _repo.Delete(profile.Id);
             await _unitOfWork.SaveChangesAsync();
+            return _mapper.Map<Profile, ProfileDto>(profile);
         }
+
+        return null;
     }
 }

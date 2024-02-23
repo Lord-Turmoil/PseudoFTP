@@ -12,7 +12,7 @@ public class AutoMapperProfile : MapperConfigurationExpression
     public AutoMapperProfile()
     {
         CreateMap<Profile, ProfileDto>();
-        CreateMap<AddProfileDto, Profile>().ForMember(p => p.Id, opt => opt.Ignore());
+        CreateMap<ProfileDto, Profile>();
 
         CreateMap<TransferHistory, TransferHistoryDto>();
         CreateMap<Profile, ProfileDto>();

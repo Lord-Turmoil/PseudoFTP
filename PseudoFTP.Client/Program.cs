@@ -63,7 +63,7 @@ class Program
                 .StaticPerform();
         }
 
-        if (options.Add != null)
+        if (options.Add != null && options.Add.Count() == 2)
         {
             return new ProgressHandler<int>("Adding profile", service.AddProfile())
                 .StaticPerform();
@@ -71,7 +71,8 @@ class Program
 
         if (options.Remove != null)
         {
-            return service.RemoveProfile();
+            return new ProgressHandler<int>("Deleting profile", service.DeleteProfile())
+                .StaticPerform();
         }
 
         Console.WriteLine("No action specified.");
