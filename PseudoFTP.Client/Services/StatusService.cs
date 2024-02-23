@@ -1,23 +1,18 @@
-﻿using Newtonsoft.Json;
-using PseudoFTP.Client.Common;
+﻿using PseudoFTP.Client.Common;
 using PseudoFTP.Helper;
 using PseudoFTP.Model.Data;
 using RestSharp;
-using Tonisoft.AspExtensions.Response;
 
 namespace PseudoFTP.Client.Services;
 
-class StatusService
+class StatusService : BaseService
 {
-    private readonly IRestClient _client;
-    private readonly Configuration _config;
     private readonly StatusOptions _options;
 
-    public StatusService(Configuration config, StatusOptions options, IRestClient client)
+    public StatusService(Configuration config, IRestClient client, StatusOptions options)
+        : base(config, client)
     {
-        _config = config;
         _options = options;
-        _client = client;
     }
 
     public async Task<int> GetStatus()
@@ -37,48 +32,5 @@ class StatusService
         }
 
         return 0;
-    }
-
-    private static string GetNonNullResponseContent(RestResponse response)
-    {
-        if (!response.IsSuccessStatusCode)
-        {
-            throw new Exception($"Error response returned: {response.StatusCode}");
-        }
-
-        if (response.Content == null)
-        {
-            throw new Exception($"Response content is null");
-        }
-
-        return response.Content;
-    }
-
-    private static TResult? GetNullableResult<TResult>(RestResponse response)
-    {
-        string content = GetNonNullResponseContent(response);
-        var dto = JsonConvert.DeserializeObject<ApiResponseDto<TResult>>(content);
-        if (dto == null)
-        {
-            throw new Exception("Failed to deserialize the response");
-        }
-
-        return dto.Data;
-    }
-
-    private static TResult GetResult<TResult>(RestResponse response)
-    {
-        var result = GetNullableResult<TResult>(response);
-        if (result == null)
-        {
-            throw new Exception("Result suppose to be not null");
-        }
-
-        return result;
-    }
-
-    private string FormatResult<TResult>(TResult result)
-    {
-        return JsonConvert.SerializeObject(result, Formatting.Indented);
     }
 }

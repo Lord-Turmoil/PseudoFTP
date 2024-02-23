@@ -61,7 +61,7 @@ class Program
     private static int RunStatus(StatusOptions options)
     {
         IRestClient client = InitRestClient();
-        var service = new StatusService(_config, options, client);
+        var service = new StatusService(_config, client, options);
         return new ProgressHandler<int>("Getting server status", service.GetStatus())
                     .StaticPerform();
     }
