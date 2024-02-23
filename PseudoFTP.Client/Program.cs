@@ -55,6 +55,26 @@ class Program
     private static int RunProfile(ProfileOptions options)
     {
         // Manage the profiles.
+        IRestClient client = InitRestClient();
+        var service = new ProfileService(_config, client, options);
+        if (options.List)
+        {
+            return new ProgressHandler<int>("Getting profiles", service.GetProfiles())
+                .StaticPerform();
+        }
+
+        if (options.Add != null)
+        {
+            return new ProgressHandler<int>("Adding profile", service.AddProfile())
+                .StaticPerform();
+        }
+
+        if (options.Remove != null)
+        {
+            return service.RemoveProfile();
+        }
+
+        Console.WriteLine("No action specified.");
         return 0;
     }
 
@@ -63,6 +83,6 @@ class Program
         IRestClient client = InitRestClient();
         var service = new StatusService(_config, client, options);
         return new ProgressHandler<int>("Getting server status", service.GetStatus())
-                    .StaticPerform();
+            .StaticPerform();
     }
 }

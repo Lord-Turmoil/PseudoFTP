@@ -60,12 +60,12 @@ class StatusOptions
 [Verb("profile", HelpText = "Manage the profiles.")]
 class ProfileOptions
 {
-    [Option('l', "list", HelpText = "List all the profiles.")]
+    [Option('l', "list", HelpText = "List all the profiles: profile --list")]
     public bool List { get; set; }
 
-    [Option('a', "add", HelpText = "Add a new profile.")]
-    public bool Add { get; set; }
+    [Option('a', "add", Required = false, Min = 2, Max = 2, HelpText = "Add a new profile: profile --add {name} {path}")]
+    public IEnumerable<string>? Add { get; set; }
 
-    [Option('r', "remove", HelpText = "Remove a profile.")]
+    [Option('r', "remove", Required = false, HelpText = "Remove a profile: profile --remove {name}")]
     public string? Remove { get; set; }
 }
