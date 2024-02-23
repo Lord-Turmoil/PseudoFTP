@@ -58,9 +58,10 @@ public class ProfileService : BaseService<ProfileService>, IProfileService
         return _mapper.Map<Profile, ProfileDto>(entity.Entity);
     }
 
-    public async Task DeleteProfileAsync(User user, int profileId)
+    public async Task DeleteProfileAsync(User user, string name)
     {
-        Profile? profile = await _repo.GetFirstOrDefaultAsync(predicate: p => p.Id == profileId && p.UserId == user.Id);
+        Profile? profile = await _repo.GetFirstOrDefaultAsync(
+            predicate: p => p.Name.Equals(name) && p.UserId == user.Id);
         if (profile != null)
         {
             _repo.Delete(profile.Id);

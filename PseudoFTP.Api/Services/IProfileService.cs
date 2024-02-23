@@ -32,7 +32,7 @@ public interface IProfileService
     /// Delete a profile of a specific user.
     /// </summary>
     /// <param name="user"></param>
-    /// <param name="profileId"></param>
+    /// <param name="name"></param>
     /// <returns></returns>
-    public Task DeleteProfileAsync(User user, int profileId);
+    public Task DeleteProfileAsync(User user, string name);
 }
