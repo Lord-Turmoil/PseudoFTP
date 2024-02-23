@@ -49,6 +49,14 @@ class Program
     private static int RunTransfer(TransferOptions options)
     {
         // Transfer files to the server.
+        IRestClient client = InitRestClient();
+        var service = new TransferService(_config, client, options);
+        if (options.Histories)
+        {
+            return new ProgressHandler<int>("Getting transfer histories", service.GetTransferHistories())
+                .StaticPerform();
+        }
+
         return 0;
     }
 

@@ -11,8 +11,8 @@ class TransferOptions
     /// <summary>
     ///     Local source directory or file.
     /// </summary>
-    [Option('s', "source", Required = true, HelpText = "Local source directory or file")]
-    public string Source { get; set; } = null!;
+    [Option('s', "source", Required = false, HelpText = "Local source directory or file")]
+    public string? Source { get; set; }
 
     /// <summary>
     ///     If specified, will use profile settings.
