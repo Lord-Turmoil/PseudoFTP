@@ -367,3 +367,4 @@ appsettings.*.json
 *.db*
 config.json
 Work/
+Publish/

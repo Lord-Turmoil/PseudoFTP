@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using PseudoFTP.Client.Common;
+using PseudoFTP.Client.Utils;
 using PseudoFTP.Helper;
 using PseudoFTP.Model.Dtos;
 using RestSharp;
@@ -24,7 +25,7 @@ class ProfileService : BaseService
             var request = new RestRequest("/api/Profile/GetProfiles");
             request.AddHeader("X-Credential", CredentialHelper.GetCredential(_config.Username, _config.Password));
             RestResponse response = await _client.ExecuteAsync(request);
-            var result = GetResult<IEnumerable<ProfileDto>>(response);
+            var result = ResponseHelper.GetResult<IEnumerable<ProfileDto>>(response);
             if (result.Any())
             {
                 Console.WriteLine("Profiles:");
@@ -66,14 +67,14 @@ class ProfileService : BaseService
             string body = $"{{\"name\":{JsonConvert.ToString(name)},\"destination\":{JsonConvert.ToString(path)}}}";
             request.AddStringBody(body, DataFormat.Json);
             RestResponse response = await _client.ExecuteAsync(request);
-            ApiResponseDto<ProfileDto> dto = GetResponseDto<ProfileDto>(response);
+            ApiResponseDto<ProfileDto> dto = ResponseHelper.GetResponseDto<ProfileDto>(response);
             if (dto.Data == null)
             {
                 Console.Error.WriteLine(dto.Meta.Message);
             }
             else
             {
-                Console.WriteLine($"Profile added: {FormatResult(dto.Data)}");
+                Console.WriteLine($"Profile added: {ResponseHelper.FormatResult(dto.Data)}");
             }
         }
         catch (Exception e)
@@ -93,7 +94,7 @@ class ProfileService : BaseService
             request.AddHeader("X-Credential", CredentialHelper.GetCredential(_config.Username, _config.Password));
             request.AddParameter("name", Uri.EscapeDataString(_options.Remove!));
             RestResponse response = await _client.ExecuteAsync(request);
-            ApiResponseDto<ProfileDto> result = GetResponseDto<ProfileDto>(response);
+            ApiResponseDto<ProfileDto> result = ResponseHelper.GetResponseDto<ProfileDto>(response);
             if (result.Data == null)
             {
                 Console.Error.WriteLine(result.Meta.Message);
@@ -102,7 +103,7 @@ class ProfileService : BaseService
             {
                 result.Data.Name = result.Data.Name;
                 result.Data.Destination = result.Data.Destination;
-                Console.WriteLine($"Profile deleted: {FormatResult(result.Data)}");
+                Console.WriteLine($"Profile deleted: {ResponseHelper.FormatResult(result.Data)}");
             }
         }
         catch (Exception e)

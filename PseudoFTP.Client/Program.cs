@@ -57,7 +57,7 @@ class Program
                 .StaticPerform();
         }
 
-        return 0;
+        return service.Transfer();
     }
 
     private static int RunProfile(ProfileOptions options)

@@ -43,8 +43,8 @@ public class TransferTask : IHostedService, IDisposable
     }
 
     /// <summary>
-    /// Add a new task to the queue.
-    /// If the requested path is currently being processed, return false.
+    ///     Add a new task to the queue.
+    ///     If the requested path is currently being processed, return false.
     /// </summary>
     /// <param name="path">Requested path.</param>
     /// <returns>Whether able to proceed.</returns>
@@ -68,24 +68,39 @@ public class TransferTask : IHostedService, IDisposable
         }
     }
 
+    private static void RemoveTask(string path)
+    {
+        lock (_mutex)
+        {
+            _activeDirectories.Remove(path);
+        }
+    }
+
     /// <summary>
-    /// Initiate a transfer, and return the transfer ID, which is the history
-    /// ID in the database.
+    ///     Initiate a transfer, and return the transfer ID, which is the history
+    ///     ID in the database.
     /// </summary>
     /// <param name="option"></param>
     /// <returns></returns>
     public async Task<int> TransferAsync(User user, TransferOption option)
     {
-        if (!AddNewTask(option.Destination))
+        try
         {
-            return -1;
+            if (!AddNewTask(option.Destination))
+            {
+                return -1;
+            }
+
+            int id = await InitiateTransfer(user, option);
+
+            TransferImpl(id, option);
+
+            return id;
         }
-
-        int id = await InitiateTransfer(user, option);
-
-        TransferImpl(id, option);
-
-        return id;
+        finally
+        {
+            RemoveTask(option.Destination);
+        }
     }
 
     private async Task<int> InitiateTransfer(User user, TransferOption option)
@@ -107,7 +122,7 @@ public class TransferTask : IHostedService, IDisposable
     }
 
     /// <summary>
-    /// Since it is a detached thread, I think it's better to be exception free.
+    ///     Since it is a detached thread, I think it's better to be exception free.
     /// </summary>
     /// <param name="id">The history ID</param>
     /// <param name="option"></param>

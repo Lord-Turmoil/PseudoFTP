@@ -1,4 +1,5 @@
 ﻿using PseudoFTP.Client.Common;
+using PseudoFTP.Client.Utils;
 using PseudoFTP.Helper;
 using PseudoFTP.Model.Data;
 using RestSharp;
@@ -22,8 +23,8 @@ class StatusService : BaseService
             var request = new RestRequest("/api/Status/GetStatus");
             request.AddHeader("X-Credential", CredentialHelper.GetCredential(_config.Username, _config.Password));
             RestResponse response = await _client.ExecuteAsync(request);
-            var result = GetResult<StatusData>(response);
-            Console.WriteLine($"Server status: {FormatResult(result)}");
+            var result = ResponseHelper.GetResult<StatusData>(response);
+            Console.WriteLine($"Server status: {ResponseHelper.FormatResult(result)}");
         }
         catch (Exception e)
         {
