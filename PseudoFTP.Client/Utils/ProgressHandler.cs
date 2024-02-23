@@ -12,7 +12,7 @@ class ProgressHandler<TResult>
         _task = task;
     }
 
-    public TResult Perform()
+    public TResult AnimatedPerform()
     {
         int i = 0;
         Console.Write($"{_prompt}... ");
@@ -25,6 +25,13 @@ class ProgressHandler<TResult>
         }
 
         Console.WriteLine($"\r{_prompt}... Completed");
+
+        return _task.Result;
+    }
+
+    public TResult StaticPerform()
+    {
+        Console.WriteLine($"{_prompt}... ");
 
         return _task.Result;
     }
