@@ -4,7 +4,7 @@ namespace Tonisoft.AspExtensions.Response;
 
 public class ApiResponseDto
 {
-    protected ApiResponseDto(int status, string? message = null, object? data = null)
+    public ApiResponseDto(int status, string? message = null, object? data = null)
     {
         Meta = new ApiResponseMeta(status, message);
         Data = data;
@@ -16,7 +16,7 @@ public class ApiResponseDto
 
 public class ApiResponseDto<TData>
 {
-    protected ApiResponseDto(int status, string? message = null, TData? data = default)
+    public ApiResponseDto(int status, string? message = null, TData? data = default)
     {
         Meta = new ApiResponseMeta(status, message);
         Data = data;

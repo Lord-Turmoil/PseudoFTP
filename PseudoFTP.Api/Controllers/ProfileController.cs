@@ -65,7 +65,7 @@ public class ProfileController : BaseController<ProfileController>
     [HttpDelete]
     public async Task<ApiResponse> DeleteProfile(
         [FromHeader(Name = "X-Credential")] string credential,
-        [FromQuery(Name = "id")] int profileId)
+        [FromQuery(Name = "name")] string name)
     {
         string username = CredentialHelper.GetUsername(credential);
         string password = CredentialHelper.GetPassword(credential);
@@ -78,7 +78,7 @@ public class ProfileController : BaseController<ProfileController>
 
         try
         {
-            await _profileService.DeleteProfileAsync(user, profileId);
+            await _profileService.DeleteProfileAsync(user, name);
         }
         catch (Exception e)
         {
