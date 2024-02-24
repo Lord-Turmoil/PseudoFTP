@@ -30,7 +30,7 @@ class TransferAgent
         try
         {
             // transfer
-            int id = TransferArchive(archivePath, dto);
+            int id = await TransferArchive(archivePath, dto);
             if (id == -1)
             {
                 throw new Exception("Failed to transfer archive.");
@@ -73,7 +73,7 @@ class TransferAgent
         return archivePath;
     }
 
-    private int TransferArchive(string archivePath, TransferDto dto)
+    private async Task<int> TransferArchive(string archivePath, TransferDto dto)
     {
         var request = new RestRequest("/api/Transfer/Transfer", Method.Post);
         request.AddHeader("X-Credential", _credential);
@@ -85,7 +85,7 @@ class TransferAgent
         request.AddParameter("overwrite", dto.Overwrite);
         request.AddParameter("purgePrevious", dto.PurgePrevious);
         request.AddParameter("keepOriginal", dto.KeepOriginal);
-        RestResponse response = _client.ExecuteAsync(request).Result;
+        RestResponse response = await _client.ExecuteAsync(request);
         int id = ResponseHelper.GetResult<int>(response);
         if (id < 0)
         {
