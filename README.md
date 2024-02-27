@@ -31,6 +31,8 @@ If you want to compile it from source, you should add `config.json` under the `P
 - `MaxTimeout` is the timeout for HTTP connection, in millisecond.
 - `MaxRetry` is how many times should the client wait for transfer to complete. The total waiting time is `MaxTimeout * MaxRetry*`.
 
+> If you don't want an extra `config.json`, you can add `-u`, `-p`, `-r` for `Username`, `Password` and `Server` respectively. But this way you won't be able to change `MaxTimeout` and `MaxRetry`.
+
 ### Transfer files
 
 To transfer files and sub-directories under local `.\public` to remote `C:\Users\Administrator\Desktop\wwwroot\Blog` with a message, you can use the following command.
@@ -54,39 +56,53 @@ Profiles:
 ### Checking server status
 
 ```pwsh
-PseudoFTP.Client.exe status
+ status
 ```
 
 ### Managing profiles
 
 ```
-PseudoFTP.Client.exe profile -l, --list      List all the profiles: profile --list
-
-PseudoFTP.Client.exe profile -a, --add       Add a new profile: profile --add {name} {path}
-
-PseudoFTP.Client.exe profile -r, --remove    Remove a profile: profile --remove {name}
+ profile -l, --list      List all the profiles: profile --list
+ 
+ profile -a, --add       Add a new profile: profile --add {name} {path}
+ 
+ profile -r, --remove    Remove a profile: profile --remove {name}
+ 
+ profile -u, --username    Username
+ 
+ profile -p, --password    Password
+ 
+ profile -r, --remote      Remote server ip with port
 ```
 
-## Transfering file/directory
+## Transferring file/directory
 
 ```
-  -s, --source         Local source directory or file
+ transfer -s, --source         Local source directory or file
 
-  -p, --profile        If specified, will use profile settings
+ transfer -f, --profile        If specified, will use profile settings
 
-  -d, --destination    Remote destination directory
+ transfer -d, --destination    Remote destination directory
 
-  -m, --message        (Default: ) Transfer message
+ transfer -m, --message        (Default: ) Transfer message
 
-  -o, --overwrite      (Default: false) Whether to overwrite the existing files
+ transfer -o, --overwrite      (Default: false) Whether to overwrite the existing files
 
-  -f, --force          (Default: false) Whether to purge all the previous files
+ transfer -f, --force          (Default: false) Whether to purge all the previous files
 
-  -k, --keep           (Default: false) Whether to keep the original .zip archive
+ transfer -k, --keep           (Default: false) Whether to keep the original .zip archive
 
-  --histories          (Default: false) Get latest 10 transfer histories
+ transfer --histories          (Default: false) Get latest 10 transfer histories
+
+ transfer -u, --username       Username
+
+ transfer -p, --password       Password
+
+ transfer -r, --remote         Remote server ip with port
+
+ transfer --help               Display this help screen.
 ```
 
 Local path can be relative or absolute, but remote path must be absolute.
 
-> Notice that, when transfering directory, it will only transfer the contents of the directory, without the directory itself.
+> Notice that, when transferring directory, it will only transfer the contents of the directory, without the directory itself.

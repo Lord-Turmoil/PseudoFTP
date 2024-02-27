@@ -24,8 +24,9 @@ class Program
         result.MapResult(
             (TransferOptions options) => RunTransfer(options),
             (ProfileOptions options) => RunProfile(options),
-            (StatusOptions options) => RunStatus(options),
-            _ => {
+            (StatusOptions options) => RunStatus(options), 
+            err => {
+                Console.WriteLine(err);
                 var helpText = HelpText.AutoBuild(result,
                     h => {
                         h.Heading = "PseudoFTP Client v1.2.0 - A tool to transfer files to remote server.";
@@ -48,6 +49,8 @@ class Program
 
     private static int RunTransfer(TransferOptions options)
     {
+        OverrideConfig(options);
+
         // Transfer files to the server.
         IRestClient client = InitRestClient();
         var service = new TransferService(_config, client, options);
@@ -62,6 +65,8 @@ class Program
 
     private static int RunProfile(ProfileOptions options)
     {
+        OverrideConfig(options);
+
         // Manage the profiles.
         IRestClient client = InitRestClient();
         var service = new ProfileService(_config, client, options);
@@ -93,5 +98,23 @@ class Program
         var service = new StatusService(_config, client, options);
         return new ProgressHandler<int>("Getting server status", service.GetStatus())
             .StaticPerform();
+    }
+
+    private static void OverrideConfig(BaseOptions options)
+    {
+        if (options.Username != null)
+        {
+            _config.Username = options.Username;
+        }
+
+        if (options.Password != null)
+        {
+            _config.Password = options.Password;
+        }
+
+        if (options.Server != null)
+        {
+            _config.Server = options.Server;
+        }
     }
 }

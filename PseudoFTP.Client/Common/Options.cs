@@ -2,8 +2,23 @@
 
 namespace PseudoFTP.Client.Common;
 
+/// <summary>
+///     Base options provides overrides to config.json.
+/// </summary>
+class BaseOptions
+{
+    [Option('u', "username", Required = false, HelpText = "Username")]
+    public string? Username { get; set; }
+
+    [Option('p', "password", Required = false, HelpText = "Password")]
+    public string? Password { get; set; }
+
+    [Option('r', "remote", Required = false, HelpText = "Remote server ip with port")]
+    public string? Server { get; set; }
+}
+
 [Verb("transfer", HelpText = "Transfer files to the server.")]
-class TransferOptions
+class TransferOptions : BaseOptions
 {
     [Option('v', "verbose", Default = false, HelpText = "Prints all messages to standard output")]
     public bool Verbose { get; set; }
@@ -17,7 +32,7 @@ class TransferOptions
     /// <summary>
     ///     If specified, will use profile settings.
     /// </summary>
-    [Option('p', "profile", Required = false, HelpText = "If specified, will use profile settings")]
+    [Option('i', "profile", Required = false, HelpText = "If specified, will use profile settings")]
     public string? Profile { get; set; }
 
     /// <summary>
@@ -61,7 +76,7 @@ class StatusOptions
 }
 
 [Verb("profile", HelpText = "Manage the profiles.")]
-class ProfileOptions
+class ProfileOptions : BaseOptions
 {
     [Option('l', "list", HelpText = "List all the profiles: profile --list")]
     public bool List { get; set; }
