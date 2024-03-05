@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "PseudoFTP.Client.Test": {
+      "commandName": "Project",
+      "workingDirectory": "$(SolutionDir)Work"
+    }
+  }
+}

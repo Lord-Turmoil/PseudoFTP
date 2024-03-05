@@ -24,9 +24,8 @@ class Program
         result.MapResult(
             (TransferOptions options) => RunTransfer(options),
             (ProfileOptions options) => RunProfile(options),
-            (StatusOptions options) => RunStatus(options), 
-            err => {
-                Console.WriteLine(err);
+            (StatusOptions options) => RunStatus(options),
+            _ => {
                 var helpText = HelpText.AutoBuild(result,
                     h => {
                         h.Heading = "PseudoFTP Client v1.2.0 - A tool to transfer files to remote server.";

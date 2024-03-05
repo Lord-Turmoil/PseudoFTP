@@ -1,11 +1,6 @@
 ﻿using PseudoFTP.Client.Utils;
 using PseudoFTP.Model.Dtos;
 using RestSharp;
-using SharpCompress.Archives;
-using SharpCompress.Archives.Zip;
-using SharpCompress.Common;
-using SharpCompress.Writers;
-using FileNotFoundException = System.IO.FileNotFoundException;
 
 namespace PseudoFTP.Client.Services;
 
@@ -25,7 +20,7 @@ class TransferAgent
     public async Task<TransferHistoryDto?> Transfer(string source, TransferDto dto, int maxRetry = 10)
     {
         // pack file
-        string archivePath = CompressFiles(source);
+        string archivePath = CompressHelper.CompressFiles(source, dto.FtpIgnore);
 
         try
         {
@@ -50,28 +45,6 @@ class TransferAgent
         }
     }
 
-    private string CompressFiles(string source)
-    {
-        var archive = ZipArchive.Create();
-        if (File.Exists(source))
-        {
-            archive = ZipArchive.Create();
-            archive.AddEntry(Path.GetFileName(source), source);
-        }
-        else if (Directory.Exists(source))
-        {
-            archive.AddAllFromDirectory(source, "*");
-        }
-        else
-        {
-            throw new FileNotFoundException($"No such file or directory: {source}");
-        }
-
-        string archivePath = Path.GetTempPath() + ".zip";
-        archive.SaveTo(archivePath, new WriterOptions(CompressionType.Deflate));
-
-        return archivePath;
-    }
 
     private async Task<int> TransferArchive(string archivePath, TransferDto dto)
     {
@@ -89,8 +62,10 @@ class TransferAgent
         int id = ResponseHelper.GetResult<int>(response);
         if (id < 0)
         {
-            throw new Exception($"Failed to transfer archive: {ResponseHelper.GetResponseDto<int>(response).Meta.Message}");
+            throw new Exception(
+                $"Failed to transfer archive: {ResponseHelper.GetResponseDto<int>(response).Meta.Message}");
         }
+
         return id;
     }
 

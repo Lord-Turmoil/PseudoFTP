@@ -32,7 +32,7 @@ class TransferOptions : BaseOptions
     /// <summary>
     ///     If specified, will use profile settings.
     /// </summary>
-    [Option('i', "profile", Required = false, HelpText = "If specified, will use profile settings")]
+    [Option('l', "profile", Required = false, HelpText = "If specified, will use profile settings")]
     public string? Profile { get; set; }
 
     /// <summary>
@@ -46,6 +46,12 @@ class TransferOptions : BaseOptions
     /// </summary>
     [Option('m', "message", Default = "", HelpText = "Transfer message")]
     public string? Message { get; set; }
+
+    /// <summary>
+    ///     Path to .ftpignore file.
+    /// </summary>
+    [Option('i', "ignore", Required = false, HelpText = "Path to .ftpignore file")]
+    public string? FtpIgnore { get; set; }
 
     /// <summary>
     ///     Whether to overwrite the existing files.
@@ -85,6 +91,6 @@ class ProfileOptions : BaseOptions
         HelpText = "Add a new profile: profile --add {name} {path}")]
     public IEnumerable<string>? Add { get; set; }
 
-    [Option('r', "remove", Required = false, HelpText = "Remove a profile: profile --remove {name}")]
+    [Option('d', "delete", Required = false, HelpText = "Delete a profile: profile --remove {name}")]
     public string? Remove { get; set; }
 }

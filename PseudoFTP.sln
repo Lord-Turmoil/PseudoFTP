@@ -19,6 +19,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PseudoFTP.Client.Test", "PseudoFTP.Client.Test\PseudoFTP.Client.Test.csproj", "{44C22044-4119-480C-ADC9-76C970852548}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{967ED3BD-0976-413D-9BF2-329D0B22EDC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{967ED3BD-0976-413D-9BF2-329D0B22EDC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{967ED3BD-0976-413D-9BF2-329D0B22EDC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44C22044-4119-480C-ADC9-76C970852548}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44C22044-4119-480C-ADC9-76C970852548}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44C22044-4119-480C-ADC9-76C970852548}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44C22044-4119-480C-ADC9-76C970852548}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -7,26 +7,31 @@ public class TransferDto
     /// <summary>
     ///     Whether to use profile instead of explicit destination.
     /// </summary>
-    public string? Profile { get; set; }
+    public string? Profile { get; init; }
 
     /// <summary>
     ///     Destination path.
     /// </summary>
-    public string? Destination { get; set; }
+    public string? Destination { get; init; }
 
     /// <summary>
     ///     Optional message.
     /// </summary>
-    public string? Message { get; set; }
+    public string? Message { get; init; }
+
+    /// <summary>
+    ///     Path to .ftpignore file.
+    /// </summary>
+    public string? FtpIgnore { get; init; }
 
     /// <summary>
     ///     A .zip archive.
     /// </summary>
     public IFormFile Archive { get; set; } = null!;
 
-    public bool Overwrite { get; set; }
-    public bool PurgePrevious { get; set; }
-    public bool KeepOriginal { get; set; }
+    public bool Overwrite { get; init; }
+    public bool PurgePrevious { get; init; }
+    public bool KeepOriginal { get; init; }
 
     public bool IsProfile => !string.IsNullOrWhiteSpace(Profile);
 }

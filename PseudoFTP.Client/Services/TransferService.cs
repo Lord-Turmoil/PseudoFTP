@@ -65,10 +65,12 @@ class TransferService : BaseService
         if (string.IsNullOrEmpty(_options.Source))
         {
             Console.Error.WriteLine("Missing source directory or file.");
+            return 1;
         }
         if (string.IsNullOrEmpty(_options.Profile) && string.IsNullOrEmpty(_options.Destination))
         {
             Console.Error.WriteLine("Specify destination directory or profile.");
+            return 2;
         }
 
         // This dto lacks archive.
@@ -76,6 +78,7 @@ class TransferService : BaseService
             Profile = _options.Profile,
             Destination = _options.Destination,
             Message = _options.Message,
+            FtpIgnore = _options.FtpIgnore,
             Overwrite = _options.Overwrite,
             PurgePrevious = _options.PurgePrevious,
             KeepOriginal = _options.KeepOriginal
@@ -84,6 +87,7 @@ class TransferService : BaseService
 
         var agent = new TransferAgent(_client, this, credential);
 
+        Console.WriteLine("Preparing to transfer...");
         TransferHistoryDto? result = new ProgressHandler<TransferHistoryDto?>("Transferring",
             agent.Transfer(_options.Source!, dto, _config.MaxRetry)).AnimatedPerform();
         if (result == null)
