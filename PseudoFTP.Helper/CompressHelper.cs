@@ -68,7 +68,7 @@ public static class CompressHelper
             throw new FileNotFoundException($"No such file or directory: {source}");
         }
 
-        string archivePath = Path.GetTempPath() + ".zip";
+        string archivePath = Path.GetTempFileName() + ".zip";
         archive.SaveTo(archivePath, new WriterOptions(CompressionType.Deflate));
         logger.LogDebug("Archive saved to {archive}", archivePath);
 
