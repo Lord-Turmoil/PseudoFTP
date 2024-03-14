@@ -3,7 +3,7 @@
 public static class PathHelper
 {
     /// <summary>
-    /// Determine whether the path is contained in the base path.
+    ///     Determine whether the path is contained in the base path.
     /// </summary>
     /// <param name="basePath"></param>
     /// <param name="targetPath"></param>
@@ -17,7 +17,7 @@ public static class PathHelper
     }
 
     /// <summary>
-    /// Determine whether two paths is related.
+    ///     Determine whether two paths is related.
     /// </summary>
     /// <param name="path1"></param>
     /// <param name="path2"></param>

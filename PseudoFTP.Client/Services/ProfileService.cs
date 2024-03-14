@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using PseudoFTP.Client.Common;
 using PseudoFTP.Client.Utils;
 using PseudoFTP.Helper;
@@ -41,7 +42,7 @@ class ProfileService : BaseService
         }
         catch (Exception e)
         {
-            Console.Error.WriteLine($"Error: {e.Message}");
+            LogHelper.GetLogger().LogError("Error: {error}", e.Message);
             return 1;
         }
 
@@ -50,12 +51,13 @@ class ProfileService : BaseService
 
     public async Task<int> AddProfile()
     {
+        ILogger logger = LogHelper.GetLogger();
         List<string> param = _options.Add!.ToList();
         string name = param[0];
         string path = param[1];
         if (!Path.IsPathRooted(path))
         {
-            Console.Error.WriteLine("Error: Path must be absolute!");
+            logger.LogError("Path must be absolute!");
             return 2;
         }
 
@@ -70,16 +72,16 @@ class ProfileService : BaseService
             ApiResponseDto<ProfileDto> dto = ResponseHelper.GetResponseDto<ProfileDto>(response);
             if (dto.Data == null)
             {
-                Console.Error.WriteLine(dto.Meta.Message);
+                logger.LogError(dto.Meta.Message);
             }
             else
             {
-                Console.WriteLine($"Profile added: {ResponseHelper.FormatResult(dto.Data)}");
+                logger.LogInformation($"Profile added: {ResponseHelper.FormatResult(dto.Data)}");
             }
         }
         catch (Exception e)
         {
-            Console.Error.WriteLine($"Error: {e.Message}");
+            logger.LogError("Error: {error}", e.Message);
             return 1;
         }
 
@@ -88,6 +90,7 @@ class ProfileService : BaseService
 
     public async Task<int> DeleteProfile()
     {
+        ILogger logger = LogHelper.GetLogger();
         try
         {
             var request = new RestRequest("/api/Profile/DeleteProfile", Method.Delete);
@@ -103,16 +106,14 @@ class ProfileService : BaseService
             {
                 result.Data.Name = result.Data.Name;
                 result.Data.Destination = result.Data.Destination;
-                Console.WriteLine($"Profile deleted: {ResponseHelper.FormatResult(result.Data)}");
+                logger.LogInformation($"Profile deleted: {ResponseHelper.FormatResult(result.Data)}");
             }
         }
         catch (Exception e)
         {
-            Console.Error.WriteLine($"Error: {e.Message}");
+            logger.LogError("Error: {error}", e.Message);
             return 1;
         }
-
-        return 0;
 
         return 0;
     }

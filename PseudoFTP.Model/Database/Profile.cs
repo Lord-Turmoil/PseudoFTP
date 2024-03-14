@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Arch.EntityFrameworkCore.UnitOfWork;
-using Microsoft.EntityFrameworkCore;
 
 namespace PseudoFTP.Model.Database;
 

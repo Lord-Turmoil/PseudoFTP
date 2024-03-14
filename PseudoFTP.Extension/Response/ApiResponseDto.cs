@@ -26,7 +26,6 @@ public class ApiResponseDto<TData>
     public TData? Data { get; set; }
 }
 
-
 public class ApiResponseMeta
 {
     public ApiResponseMeta()

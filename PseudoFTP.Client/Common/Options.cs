@@ -15,14 +15,14 @@ class BaseOptions
 
     [Option('r', "remote", Required = false, HelpText = "Remote server ip with port")]
     public string? Server { get; set; }
+
+    [Option('v', "verbose", Default = false, HelpText = "Prints all messages to standard output")]
+    public bool Verbose { get; set; }
 }
 
 [Verb("transfer", HelpText = "Transfer files to the server.")]
 class TransferOptions : BaseOptions
 {
-    [Option('v', "verbose", Default = false, HelpText = "Prints all messages to standard output")]
-    public bool Verbose { get; set; }
-
     /// <summary>
     ///     Local source directory or file.
     /// </summary>

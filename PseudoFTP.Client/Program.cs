@@ -1,5 +1,6 @@
 ﻿using CommandLine;
 using CommandLine.Text;
+using Microsoft.Extensions.Logging;
 using PseudoFTP.Client.Common;
 using PseudoFTP.Client.Services;
 using PseudoFTP.Client.Utils;
@@ -21,6 +22,7 @@ class Program
         var parser = new Parser(config => config.HelpWriter = null);
 
         ParserResult<object>? result = parser.ParseArguments<TransferOptions, ProfileOptions, StatusOptions>(args);
+        Delegate action;
         result.MapResult(
             (TransferOptions options) => RunTransfer(options),
             (ProfileOptions options) => RunProfile(options),
@@ -115,5 +117,7 @@ class Program
         {
             _config.Server = options.Server;
         }
+
+        LogHelper.Init(options.Verbose ? LogLevel.Debug : LogLevel.Information);
     }
 }

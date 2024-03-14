@@ -1,7 +1,7 @@
-﻿using PseudoFTP.Client.Common;
+﻿using Microsoft.Extensions.Logging;
+using PseudoFTP.Client.Common;
 using PseudoFTP.Client.Utils;
 using PseudoFTP.Helper;
-using PseudoFTP.Model;
 using PseudoFTP.Model.Dtos;
 using RestSharp;
 using Spectre.Console;
@@ -19,6 +19,7 @@ class TransferService : BaseService
 
     public async Task<int> GetTransferHistories()
     {
+        ILogger logger = LogHelper.GetLogger();
         try
         {
             var request = new RestRequest("/api/Transfer/GetTransferHistories");
@@ -53,7 +54,7 @@ class TransferService : BaseService
         }
         catch (Exception e)
         {
-            Console.WriteLine(e.Message);
+            logger.LogError(e, "Failed to get transfer histories.");
             return 1;
         }
 
@@ -62,14 +63,16 @@ class TransferService : BaseService
 
     public int Transfer()
     {
+        ILogger logger = LogHelper.GetLogger();
         if (string.IsNullOrEmpty(_options.Source))
         {
-            Console.Error.WriteLine("Missing source directory or file.");
+            logger.LogError("Missing source directory or file.");
             return 1;
         }
+
         if (string.IsNullOrEmpty(_options.Profile) && string.IsNullOrEmpty(_options.Destination))
         {
-            Console.Error.WriteLine("Specify destination directory or profile.");
+            logger.LogError("Specify destination directory or profile.");
             return 2;
         }
 
@@ -87,27 +90,26 @@ class TransferService : BaseService
 
         var agent = new TransferAgent(_client, this, credential);
 
-        Console.WriteLine("Preparing to transfer...");
+        logger.LogInformation("Preparing to transfer...");
         TransferHistoryDto? result = new ProgressHandler<TransferHistoryDto?>("Transferring",
             agent.Transfer(_options.Source!, dto, _config.MaxRetry)).AnimatedPerform();
         if (result == null)
         {
-            Console.Error.WriteLine("Failed to transfer.");
+            logger.LogError("Failed to transfer.");
             return 1;
         }
 
         if (result.IsSuccessful)
         {
-            Console.WriteLine("Transfer completed.");
+            logger.LogInformation("Transfer completed.");
         }
         else if (result.IsFailed)
         {
-            Console.Error.WriteLine("Transfer failed.");
-            Console.Error.WriteLine(result.Error);
+            logger.LogError("Transfer failed: {error}", result.Error);
         }
         else
         {
-            Console.Error.WriteLine("Transfer timed out. Use `transfer --history` to check for latest status.");
+            logger.LogWarning("Transfer checking timed out. Use `transfer --history` to check for latest status.");
         }
 
         return 0;
@@ -122,5 +124,4 @@ class TransferService : BaseService
         var result = ResponseHelper.GetResult<TransferHistoryDto>(response);
         return result;
     }
-
 }

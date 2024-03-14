@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Arch.EntityFrameworkCore.UnitOfWork;
-using Microsoft.EntityFrameworkCore;
 
 namespace PseudoFTP.Model.Database;
 
@@ -12,6 +11,7 @@ public class TransferHistory
     public int Id { get; set; }
 
     public int UserId { get; set; }
+
     [ForeignKey("UserId")]
     public User User { get; set; } = null!;
 

@@ -27,7 +27,7 @@ class Configuration
         using StreamReader reader = new(path);
         string json = reader.ReadToEnd();
         Configuration config = JsonConvert.DeserializeObject<Configuration>(json) ??
-                        throw new Exception("Invalid configuration");
+                               throw new Exception("Invalid configuration");
         return config;
     }
 }

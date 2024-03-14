@@ -49,8 +49,9 @@ public class TransferController : BaseController<TransferController>
         int id = await _transferService.TransferAsync(user, option);
         if (id < 0)
         {
-            return new OkResponse(new BadDto(1000, "Server is busy, try again later", data: id));
+            return new OkResponse(new BadDto(1000, "Server is busy, try again later", id));
         }
+
         return new OkResponse(new OkDto(data: id));
     }
 
@@ -128,6 +129,7 @@ public class TransferController : BaseController<TransferController>
         {
             dto.Archive.CopyTo(stream);
         }
+
         option.Source = path;
 
         return option;

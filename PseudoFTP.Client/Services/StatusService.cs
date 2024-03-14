@@ -1,4 +1,5 @@
-﻿using PseudoFTP.Client.Common;
+﻿using Microsoft.Extensions.Logging;
+using PseudoFTP.Client.Common;
 using PseudoFTP.Client.Utils;
 using PseudoFTP.Helper;
 using PseudoFTP.Model.Data;
@@ -28,7 +29,7 @@ class StatusService : BaseService
         }
         catch (Exception e)
         {
-            Console.WriteLine($"Error: {e.Message}");
+            LogHelper.GetLogger().LogError("Error: {error}", e.Message);
             return 1;
         }
 

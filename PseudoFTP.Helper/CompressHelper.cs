@@ -1,4 +1,5 @@
 ﻿using MAB.DotIgnore;
+using Microsoft.Extensions.Logging;
 using SharpCompress.Archives;
 using SharpCompress.Archives.Zip;
 using SharpCompress.Common;
@@ -20,11 +21,13 @@ public static class CompressHelper
     /// <exception cref="FileNotFoundException"></exception>
     public static string CompressFiles(string source, string? ftpIgnorePath = null)
     {
+        ILogger logger = LogHelper.GetLogger();
         var archive = ZipArchive.Create();
         if (File.Exists(source))
         {
             archive = ZipArchive.Create();
             archive.AddEntry(Path.GetFileName(source), source);
+            logger.LogDebug("Compressing {file}...", source);
         }
         else if (Directory.Exists(source))
         {
@@ -35,16 +38,17 @@ public static class CompressHelper
                 if (File.Exists(file))
                 {
                     ftpIgnorePath = file;
-                    Console.WriteLine("Using .ftpignore file: " + ftpIgnorePath);
                 }
             }
 
             if (ftpIgnorePath is null)
             {
                 archive.AddAllFromDirectory(source, "*");
+                logger.LogDebug("Compressing all files and folders in {folder}...", source);
             }
             else
             {
+                logger.LogDebug("Using .ftpignore file {file}", ftpIgnorePath);
                 IEnumerable<string> files = GetAcceptedFiles(source, ftpIgnorePath);
                 foreach (string file in files)
                 {
@@ -55,6 +59,7 @@ public static class CompressHelper
                         true,
                         fileInfo.Length,
                         fileInfo.LastWriteTime);
+                    logger.LogDebug("\tCompressing {file}...", file);
                 }
             }
         }
@@ -65,6 +70,7 @@ public static class CompressHelper
 
         string archivePath = Path.GetTempPath() + ".zip";
         archive.SaveTo(archivePath, new WriterOptions(CompressionType.Deflate));
+        logger.LogDebug("Archive saved to {archive}", archivePath);
 
         return archivePath;
     }

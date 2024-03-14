@@ -1,8 +1,5 @@
-﻿using Arch.EntityFrameworkCore.UnitOfWork;
-using AutoMapper;
-using PseudoFTP.Extension;
+﻿using PseudoFTP.Extension;
 using PseudoFTP.Model.Data;
-using Tonisoft.AspExtensions.Module;
 
 namespace PseudoFTP.Api.Services.Impl;
 
@@ -12,10 +9,6 @@ public class StatusService : IStatusService
     //    : base(unitOfWork, mapper, logger)
     //{
     //}
-
-    public StatusService()
-    {
-    }
 
     public StatusData GetStatus()
     {

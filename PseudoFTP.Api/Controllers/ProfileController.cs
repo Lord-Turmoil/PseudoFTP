@@ -83,6 +83,7 @@ public class ProfileController : BaseController<ProfileController>
             {
                 return new OkResponse(new BadDto(1001, "Failed to delete profile or profile not found"));
             }
+
             return new OkResponse(new OkDto(data: dto));
         }
         catch (Exception e)

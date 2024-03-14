@@ -29,7 +29,8 @@ public class TransferService : BaseService<TransferService>, ITransferService
 
     public async Task<TransferHistoryDto?> GetTransferHistoryAsync(User user, int id)
     {
-        TransferHistory? history = await _repo.GetFirstOrDefaultAsync(predicate: h => h.Id == id && h.UserId == user.Id);
+        TransferHistory? history =
+            await _repo.GetFirstOrDefaultAsync(predicate: h => h.Id == id && h.UserId == user.Id);
         return history == null ? null : _mapper.Map<TransferHistory, TransferHistoryDto>(history);
     }
 
@@ -37,8 +38,8 @@ public class TransferService : BaseService<TransferService>, ITransferService
     {
         IPagedList<TransferHistory> histories =
             await _repo.GetPagedListAsync(
-                predicate: h => h.UserId == user.Id,
-                orderBy: o => o.OrderByDescending(h => h.Started),
+                h => h.UserId == user.Id,
+                o => o.OrderByDescending(h => h.Started),
                 pageIndex: 0,
                 pageSize: 10);
 
