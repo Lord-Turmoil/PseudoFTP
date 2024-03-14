@@ -101,7 +101,7 @@ class TransferService : BaseService
 
         if (result.IsSuccessful)
         {
-            logger.LogInformation("Transfer completed.");
+            logger.LogDebug("Transfer completed.");
         }
         else if (result.IsFailed)
         {
